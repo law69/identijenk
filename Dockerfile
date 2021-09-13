@@ -21,8 +21,10 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.29.2/\
 docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; \ 
     chmod +x /usr/local/bin/docker-compose
 USER jenkins
-COPY plugins.txt /usr/share/jenkins/plugins.txt
+#COPY plugins.txt /usr/share/jenkins/plugins.txt
+
+COPY --chown=jenkins:jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 
 #RUN install-plugins.sh /usr/share/jenkins/plugins.txt
-RUN sudo java -jar jenkins-cli.jar -s http://localhost:8080/ install-plugin /usr/share/jenkins/plugins.txt                      
 #RUN /usr/local/bin/install-plugin.sh /usr/share/jenkins/plugins.txt
